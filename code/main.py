@@ -215,6 +215,7 @@ def main():
         # set python path
         devcontainer["customizations"]["vscode"]["settings"] = devcontainer["customizations"]["vscode"].get("settings", {})
         devcontainer["customizations"]["vscode"]["settings"]["python.pythonPath"] = "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}"
+        devcontainer["customizations"]["vscode"]["settings"]["python.defaultInterpreterPath"] = "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}"
         with open(f"{target_folder}/.devcontainer/devcontainer.json", "w") as f:
             json.dump(devcontainer, f, indent=4)
         

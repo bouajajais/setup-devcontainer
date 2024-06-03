@@ -11,6 +11,7 @@ FROM ismailbouajaja/poetry:${POETRY_VERSION}-python${PYTHON_TAG}
 #### System-wide setup
 ## Put custom system-wide setup here
 # ...
+RUN apt-get update && apt-get install -y git
 ## End of custom system-wide setup
 #### End of system-wide setup
 
@@ -61,7 +62,15 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Copy Poetry files and install dependencies
 COPY --chown=${USERNAME}:${USERNAME} code/pyproject.toml code/poetry.lock* ./
-RUN poetry install --no-root
+RUN poetry config virtualenvs.path /home/${USERNAME}/.venvs \
+    && poetry install --no-root
+
+# Get the path to the Poetry virtual environment's Python executable for devcontainer
+RUN PYTHON_PATH=$(poetry env info --executable) \
+    && echo "PYTHON_PATH=${PYTHON_PATH}" >> ~/.python_path
+USER root
+RUN cat /home/${USERNAME}/.python_path >> /etc/environment
+USER ${USERNAME}
 
 # Copy the code directory contents into the container at /app/code
 COPY --chown=${USERNAME}:${USERNAME} code ./

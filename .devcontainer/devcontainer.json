@@ -30,7 +30,8 @@
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "bash",
-                "python.defaultInterpreterPath": "/usr/local/bin/python"
+                "python.pythonPath": "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}",
+                "python.defaultInterpreterPath": "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}"
             }
         }
     }
