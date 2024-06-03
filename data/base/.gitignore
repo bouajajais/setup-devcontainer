@@ -2,10 +2,6 @@
 **/.venv
 **/.env
 data/**
-!/data/base
-!/data/config
-!data/base/**
-!data/config/**
 secrets/**
 !.gitignore
 !.dockerignore

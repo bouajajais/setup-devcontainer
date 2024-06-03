@@ -1,0 +1,31 @@
+{
+    "name": "name_placeholder",
+    "dockerComposeFile": "../compose.yaml",
+    "service": "name_placeholder",
+    "workspaceFolder": "/app",
+    "mounts": [
+        {
+            "source": "./",
+            "target": "/app",
+            "type": "bind"
+        },
+        {
+            "source": "~/.ssh",
+            "target": "/root/.ssh",
+            "type": "bind"
+        }
+    ],
+    "remoteUser": "user",
+    "initializeCommand": "./set_user_guid.sh .env",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    }
+}
