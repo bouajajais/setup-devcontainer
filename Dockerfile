@@ -55,6 +55,10 @@ USER $USERNAME
 # ...
 WORKDIR /app/code
 
+# Copy the entrypoint script
+COPY --chown=${USERNAME}:${USERNAME} entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Copy Poetry files and install dependencies
 COPY --chown=${USERNAME}:${USERNAME} code/pyproject.toml code/poetry.lock* ./
 RUN poetry install --no-root
@@ -69,10 +73,6 @@ COPY --chown=${USERNAME}:${USERNAME} data/base /app/data/base
 COPY --chown=${USERNAME}:${USERNAME} data/config/config.json /app/data/config/config.json
 
 ## End of custom user-specific setup
-
-# Copy the entrypoint script
-COPY --chown=${USERNAME}:${USERNAME} entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
 
 #### End of user-specific setup
 

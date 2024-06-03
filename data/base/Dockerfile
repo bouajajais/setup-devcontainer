@@ -43,6 +43,10 @@ RUN SU_EXEC_VERSION=0.2 \
 # Switch to the ${USERNAME}
 USER $USERNAME
 
+# Copy the entrypoint script
+COPY --chown=${USERNAME}:${USERNAME} entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 ## Put custom user-specific setup here
 # Do not forget to chown the files to the ${USERNAME} user
 # Example:
@@ -68,10 +72,6 @@ USER $USERNAME
 # # Copy the code directory contents into the container at /app/code
 # COPY --chown=${USERNAME}:${USERNAME} code ./
 ## End of custom user-specific setup
-
-# Copy the entrypoint script
-COPY --chown=${USERNAME}:${USERNAME} entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
 
 #### End of user-specific setup
 
