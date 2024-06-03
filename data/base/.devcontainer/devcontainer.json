@@ -13,6 +13,11 @@
             "source": "~/.ssh",
             "target": "/root/.ssh",
             "type": "bind"
+        },
+        {
+            "source": "~/.ssh",
+            "target": "/home/user/.ssh",
+            "type": "bind"
         }
     ],
     "remoteUser": "user",
