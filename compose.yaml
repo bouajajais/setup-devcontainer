@@ -1,0 +1,16 @@
+name: setup-devcontainer
+
+services:
+  setup-devcontainer:
+    build:
+      context: .
+      args:
+        - USER_UID=${USER_UID:?USER_UID not set}
+        - USER_GID=${USER_GID:?USER_GID not set}
+    image: setup-devcontainer
+    environment:
+      - USER_UID=${USER_UID:?USER_UID not set}
+      - USER_GID=${USER_GID:?USER_GID not set}
+    volumes:
+      - ${CONFIG_PATH:-./data/config}:/app/data/config
+      - ${TARGET_PATH:-./data/target}:/app/data/target

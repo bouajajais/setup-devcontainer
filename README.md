@@ -1,0 +1,138 @@
+# setup-devcontainer
+
+This Docker image enables easy setup of a Docker devcontainer environment for VSCode. It provides seamless integration between your local development environment and the container, allowing you to leverage VSCode's features and extensions within the containerized environment.
+
+## Available tags
+
+Only `latest` tag is available for now.
+
+Other tags will be added later for proper versioning.
+
+## Usage
+
+To use this image from Docker Hub, run the following command :
+
+```bash
+docker run --rm -it \
+    -e USER_UID=$(id -u) \
+    -e USER_GID=$(id -g) \
+    -v /optional/path/to/config.json:/app/data/config/config.json \
+    -v /path/to/project/folder:/app/data/target \
+    ismailbouajaja/setup-devcontainer
+```
+
+This will initialize a project in `/path/to/project/folder`, you can then customize the generated `Dockerfile`, `compose.yaml` and `.devcontainer/devcontainer.json` then `Reopen vscode in container` allowing you and others to develop your project in the right same environment.
+
+## Clone repository
+
+To clone the github repository, follow these steps :
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/bouajajais/setup-devcontainer.git
+    ```
+
+2. Navigate to the project directory:
+    ```bash
+    cd setup-devcontainer
+    ```
+
+### Build and run the Dockerfile
+2. Build the Docker image using the provided Dockerfile:
+    ```bash
+    docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t setup-devcontainer .
+    ```
+
+    The `docker build` command accepts the following arguments:
+    - `ARG PYTHON_VERSION=3.12-slim`: The Python version to install.
+    - `ARG POETRY_VERSION=1.8`: The Poetry version to install.
+
+3. Run the Docker container:
+    ```bash
+    docker run --rm -it \
+        -e USER_UID=$(id -u) \
+        -e USER_GID=$(id -g) \
+        -v /optional/path/to/config.json:/app/data/config/config.json \
+        -v /path/to/project/folder:/app/data/target \
+        setup-devcontainer
+    ```
+
+### Docker compose up
+2. Create a `.env` file next to the file `compose.yaml` and define the following environment variables inside :
+    ```bash
+    CONFIG_PATH=/optional/path/to/config.json
+    TARGET_PATH=/path/to/project/folder
+    ```
+
+3. Run the following commands :
+    ```bash
+    chmod +x ./set_user_guid.sh
+    ./set_user_guid.sh
+    docker compose up --build
+    ```
+
+## Project Details
+
+This section explains the structure of the project initialized using this image.
+
+- A file `Dockerfile` that defines the image to be built. It includes :
+    - A base image
+    - System-wide setup
+    - User-specific setup
+    - Default entrypoint that will run entrypoint.sh as root
+- A file `compose.yaml` that defines how to build and run the image defined by the `Dockerfile`. It includes :
+    - `USER_UID` and `USER_GID` as build arguments and environment variables for running a container
+    - Other optional elements defined in the config.json file such as ports, data volumes, secrets volume, gpu declaration
+- A file `.devcontainer/devcontainer.json` that defines how the image should be built and run as a development container for vs code. It includes :
+    - `workspaceFolder`: path to the folder opened by vs code within the dev container
+    - `mounts`:
+        - mounts current folder (containing `.devcontainer/devcontainer.json`) to the container's `workspaceFolder`
+        - and mounts `~/.ssh` folder to `/root/.ssh` for services like github from within the dev container
+    - `remoteUser`: Corresponds to the `USERNAME` defined in the `Dockerfile`, to attach to the container as a user instead of the `root` user
+    - `overrideCommand`: set to `true`. Keeps the container up and running to be able to attach to it
+    - `initializeCommand: "chmod +x ./set_user_guid.sh && ./set_user_guid.sh .env"`: sets the `USER_UID` and `USER_GID` environment variables in `.env` to be automatically used by `compose.yaml` for build of the image with the correct user (corresponding to the user of the host)
+    - `postStartCommand: "git config --global --add safe.directory ${containerWorkspaceFolder}"`: adds the workspace folder to git safe directories to run git commands within the dev container
+    `customizations`: includes `extensions` to be installed automatically within the dev container and `settings` for the container's vs code instance
+    - etc.
+- `set_user_guid.sh`: to be run first before building the image and running a container to set `USER_UID` and `USER_GID` in `.env`. It is automatically run by vscode when reopening it in container.
+- `entrypoint.sh`: script that is run by default by any container spawned by `docker run` or `docker compose`. It corrects permissions within the container before executing command passed to `docker run` command or defined in `compose.yaml` file.
+- `code` folder that will contain all the code of the program.
+- `data` folder that will contain all data ingested and generated by the program. Depending on the needs of the project, some of `data` will be local to the container, some will be mounted as a `named docker volume`, some will be mounted from the host, etc.
+- `secrets` and `.secrets.env` for handling sensitive environment variables :
+    - `secrets`: every sensitive environment variable will be stored in one secret file inside this folder (`.openai_api_key` for example)
+    - `.secrets.env` will define environment variables that holds the paths to each of the sensitive environment variables in the `secrets` folder. (`OPENAI_KEY_API=/app/secrets/.openai_api_key` for example)
+- other files such as `.dockerignore`, `.gitignore`
+
+### NOTE : git
+
+For `git` to be available within the dev container, you need to use a base image in the `Dockerfile` that has `git` installed or install it on top of the base image.
+
+Otherwise, you will have to reopen vs code in the host in order to use git.
+
+### Default config.json
+`config.json` file is read by python `json` module and shouldn't have any comments in it.
+
+```json
+{
+    "clear-folder": false,
+    "name": "base-devcontainer",
+    "ports": [],
+    "include-data": true,
+    "data-volumes": {
+        "compose": [
+            "${DATA_PATH:-./data}:/app/data"
+        ],
+        "devcontainer": []
+    },
+    "include-secrets": true,
+    "secrets": [],
+    "include-gpu": true,
+    "git-config": true,
+    "include-gitignore": true,
+    "include-python": false
+}
+```
+
+## Contributing
+
+Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
