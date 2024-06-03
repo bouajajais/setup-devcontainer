@@ -100,6 +100,14 @@ To clone the github repository, follow these steps :
 
 If you set `"clear-folder": true` in your `config.json` file, this will delete the folder and recreate it before initializing the project inside it.
 
+#### Python
+
+If you decide to `include-python`, this automatically installs python's vscode extension inside the dev container.
+
+It also sets python's interpreter's default path to `${containerEnv:PYTHON_PATH:-/usr/local/bin/python}` which is the environment variable `PYTHON_PATH` defined inside the dev container if it's set, otherwise it's `/usr/local/bin/python`.
+
+A good place to define this environment variable is inside the `Dockerfile`. There's an example for `poetry` users inside the `Dockerfile` template.
+
 ## Project Details
 
 ### Project structure

@@ -49,6 +49,24 @@ USER $USERNAME
 # COPY --chown=${USERNAME}:${USERNAME} source destination
 # ...
 # ...
+# Example :
+# # Create a directory for the application
+# WORKDIR /app/code
+
+# # Copy Poetry files and install dependencies
+# COPY --chown=${USERNAME}:${USERNAME} code/pyproject.toml code/poetry.lock* ./
+# RUN poetry config virtualenvs.path /home/${USERNAME}/.venvs \
+#     && poetry install --no-root
+
+# # Get the path to the Poetry virtual environment's Python executable for devcontainer
+# RUN PYTHON_PATH=$(poetry env info --executable) \
+#     && echo "PYTHON_PATH=${PYTHON_PATH}" >> ~/.python_path
+# USER root
+# RUN cat /home/${USERNAME}/.python_path >> /etc/environment
+# USER ${USERNAME}
+
+# # Copy the code directory contents into the container at /app/code
+# COPY --chown=${USERNAME}:${USERNAME} code ./
 ## End of custom user-specific setup
 
 # Copy the entrypoint script
