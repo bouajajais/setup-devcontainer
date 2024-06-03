@@ -71,7 +71,38 @@ To clone the github repository, follow these steps :
     docker compose up --build
     ```
 
+### Default config.json
+
+`config.json` file is read by python `json` module and shouldn't have any comments in it.
+
+```json
+{
+    "clear-folder": false,
+    "name": "base-devcontainer",
+    "ports": [],
+    "include-data": true,
+    "data-volumes": {
+        "compose": [
+            "${DATA_PATH:-./data}:/app/data"
+        ],
+        "devcontainer": []
+    },
+    "include-secrets": true,
+    "secrets": [],
+    "include-gpu": true,
+    "git-config": true,
+    "include-gitignore": true,
+    "include-python": false
+}
+```
+
+#### IMPORTANT NOTE
+
+If you set `"clear-folder": true` in your `config.json` file, this will delete the folder and recreate it before initializing the project inside it.
+
 ## Project Details
+
+### Project structure
 
 This section explains the structure of the project initialized using this image.
 
@@ -103,35 +134,79 @@ This section explains the structure of the project initialized using this image.
     - `.secrets.env` will define environment variables that holds the paths to each of the sensitive environment variables in the `secrets` folder. (`OPENAI_KEY_API=/app/secrets/.openai_api_key` for example)
 - other files such as `.dockerignore`, `.gitignore`
 
+### Reopen in Container
+
+Once the project is initialized and manually customized to your liking, you can `Reopen in Container` in vscode.
+
+VSCode builds the image then runs a container of that image then attaches the current vscode window to it.
+
+In other words it reopens vscode inside the container.
+
+This allows you to develop within the correct (dev) environment.
+
+The behaviour of these 3 steps is defined in the following files :
+
+- `Dockerfile`: Defines the layers of the image to be built.
+
+- `compose.yaml`: Defines how the image is built and how the container is run. It allows for multiple services to be run.
+
+- `.devcontainer/devcontainer.json`: Customizes the behaviour of `compose.yaml` and defines how vscode attaches itself to the running container.
+
+### Project build and run
+
+You can look up [Docker's documentation](https://docs.docker.com/get-started/) for more custom commands.
+
+In both cases, unless you've updated the original `Dockerfile` and `compose.yaml` global definitions, the environment variables `USER_UID` and `USER_GID` must be provided to the commands below for a correct build/run.
+
+While it is only required to provide these environment variables during run time, it is still highly encouraged to build your image with the same arguments `USER_UID` and `USER_GID` to avoid an initial delay when running your container to setup correctly the user's permissions during build time.
+
+#### Using `docker build` and `docker run`
+
+Using only `Dockerfile`, you can build your image and run a container manually.
+
+Depending on the configuration you've initialized your project with, here is how your `build` and `run` commands would look like :
+
+1. `docker build`:
+    ```bash
+    docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t put-image-name-here .
+    ```
+
+2. `docker run`:
+    ```bash
+    docker run \
+        --gpus all \
+        -e USER_UID=$(id -u) \
+        -e USER_GID=$(id -g) \
+        -v /your/first/mounted/volume:/app/data/first/volume \
+        -v /your/second/mounted/volume:/app/data/second/volume \
+        --mount type=bind,src=./secrets,dst=/run/secrets,readonly=true \
+        --env-file .secrets.env \
+        --name put-image-name-here
+        put-image-name-here
+    ```
+
+#### Using `docker compose`
+
+Using `compose.yaml` alongside `Dockerfile`, you can build your image(s) and run one or multiple containers/services in a more automated and predefined way.
+
+1. Environment variables `USER_UID` and `USER_GID` must be defined with user's ids. One way to do so is to run the `./set_user_guid.sh` script that will define these variables correctly in `.compose.env` file.
+
+```bash
+chmod +x ./set_user_guid.sh
+./set_user_guid.sh .compose.env
+```
+
+Here's how your `compose` command would typically look like :
+
+```bash
+docker compose --env-file .compose.env up --build
+```
+
 ### NOTE : git
 
 For `git` to be available within the dev container, you need to use a base image in the `Dockerfile` that has `git` installed or install it on top of the base image.
 
 Otherwise, you will have to reopen vs code in the host in order to use git.
-
-### Default config.json
-`config.json` file is read by python `json` module and shouldn't have any comments in it.
-
-```json
-{
-    "clear-folder": false,
-    "name": "base-devcontainer",
-    "ports": [],
-    "include-data": true,
-    "data-volumes": {
-        "compose": [
-            "${DATA_PATH:-./data}:/app/data"
-        ],
-        "devcontainer": []
-    },
-    "include-secrets": true,
-    "secrets": [],
-    "include-gpu": true,
-    "git-config": true,
-    "include-gitignore": true,
-    "include-python": false
-}
-```
 
 ## Contributing
 
