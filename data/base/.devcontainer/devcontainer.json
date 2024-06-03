@@ -16,7 +16,7 @@
         }
     ],
     "remoteUser": "user",
-    "initializeCommand": "./set_user_guid.sh .env",
+    "initializeCommand": "chmod +x ./set_user_guid.sh && ./set_user_guid.sh .env",
     "customizations": {
         "vscode": {
             "extensions": [
