@@ -8,6 +8,9 @@
 # USERNAME of the default user created during the image build
 USERNAME=user
 
+# WORKDIR
+WORKDIR=/app
+
 # Exit if not connected as root
 if [ "$(id -u)" -ne 0 ]; then
     echo "This script must be run as root. Define the USER_UID and USER_GID environment variables instead."
@@ -23,7 +26,7 @@ fi
 # Check if the selected user does NOT correspond to the default user
 if [ "$(id -u ${USERNAME})" -ne "${USER_UID}" ] || [ "$(id -g ${USERNAME})" -ne "${USER_GID}" ]; then
     # Change ownership of the home directory and application directory
-    chown -R ${USER_UID}:${USER_GID} /home/${USERNAME} /app
+    chown -R ${USER_UID}:${USER_GID} /home/${USERNAME} ${WORKDIR}
 
     # Change the UID and GID of the user if they are different from the default
     if [ "$(id -g ${USERNAME})" -ne "${USER_GID}" ]; then
@@ -35,5 +38,8 @@ if [ "$(id -u ${USERNAME})" -ne "${USER_UID}" ] || [ "$(id -g ${USERNAME})" -ne 
     fi
 fi
 
+# Change the ownership of the application directory
+chown -R ${USERNAME}:${USERNAME} ${WORKDIR}
+
 # Run the command as the selected user
-su-exec ${USER_UID}:${USER_GID} "$@"
+exec gosu ${USERNAME} "$@"

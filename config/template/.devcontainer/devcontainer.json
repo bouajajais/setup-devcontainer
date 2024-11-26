@@ -1,7 +1,7 @@
 {
-    "name": "dev-setup-devcontainer",
+    "name": "NAME_PLACEHOLDER",
     "dockerComposeFile": "../compose.dev.yaml",
-    "service": "dev-setup-devcontainer",
+    "service": "NAME_PLACEHOLDER",
     "workspaceFolder": "/app",
     "mounts": [
         {
@@ -16,14 +16,9 @@
     "postAttachCommand": "sudo chown -R user:user .",
     "customizations": {
         "vscode": {
-            "extensions": [
-                "ms-azuretools.vscode-docker",
-                "ms-python.python",
-                "GitHub.copilot"
-            ],
+            "extensions": [],
             "settings": {
-                "terminal.integrated.defaultProfile.linux": "bash",
-                "python.pythonPath": "${containerEnv:PYTHON_PATH}"
+                "terminal.integrated.defaultProfile.linux": "bash"
             }
         }
     },

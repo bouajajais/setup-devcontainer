@@ -1,0 +1,90 @@
+# syntax=docker/dockerfile:1
+
+# Set the Python TAG to install
+ARG PYTHON_TAG=3.10-slim-buster
+
+# Install Poetry and setup final image on top of the CUDA Python image
+FROM python:${PYTHON_TAG} AS base
+
+#### Docker Image Setup for root-user management
+## Do not alter this section unless you know what you are doing
+
+# Create a non-root user
+ARG USERNAME=user
+ARG USER_UID=1000
+ARG USER_GID=1000
+
+# Create the user and group with the specified UID/GID
+RUN groupadd --gid ${USER_GID} ${USERNAME} \
+    && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} \
+    # Add sudo support. Omit if you don't need to install software after connecting.
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+    && chmod 0440 /etc/sudoers.d/${USERNAME}
+
+# Install git and openssh-client
+RUN apt-get update \
+    && apt-get install -y \
+    git \
+    openssh-client
+
+#### End of Docker Image Setup for root-user management
+
+#### System-wide setup
+## Put custom System-wide setup here
+
+## End of custom System-wide setup
+#### End of System-wide setup
+
+# Switch to the ${USERNAME}
+USER $USERNAME
+
+#### User-specific setup
+## Put custom user-specific setup here
+
+# Change the working directory to /app/src
+WORKDIR /app/src
+
+# Set the Poetry version to install
+ARG POETRY_VERSION=1.8.*
+ARG PYTHONDONTWRITEBYTECODE=1
+ARG PYTHONUNBUFFERED=1
+
+# Set environment variables for Python
+ENV POETRY_VERSION=${POETRY_VERSION} \
+    PYTHONDONTWRITEBYTECODE=${PYTHONDONTWRITEBYTECODE} \
+    PYTHONUNBUFFERED=${PYTHONUNBUFFERED}
+
+# Set the environment variables for Poetry
+ENV PATH=/home/${USERNAME}/.local/bin:$PATH
+
+# Install Poetry
+RUN pip install --upgrade pip \
+    && pip install --user "poetry==${POETRY_VERSION}"
+
+# Copy Poetry files and install dependencies
+COPY --chown=${USERNAME}:${USERNAME} ./src/pyproject.toml ./src/poetry.lock* ./
+
+# Enable virtualenv creation && Install the dependencies
+RUN poetry config virtualenvs.path /home/${USERNAME}/.venvs \
+    && poetry install --no-root
+
+# Get the path to the Poetry virtual environment's Python executable
+RUN PYTHON_PATH=$(poetry env info --executable) \
+    && echo "PYTHON_PATH=${PYTHON_PATH}" >> /home/${USERNAME}/.python_path
+USER root
+RUN cat /home/${USERNAME}/.python_path >> /etc/environment
+USER ${USERNAME}
+
+# Change the working directory to /app
+WORKDIR /app
+
+# Copy the directory contents into the container at /app
+COPY --chown=${USERNAME}:${USERNAME} ./ ./
+
+## End of custom user-specific setup
+#### End of user-specific setup
+
+# Set the default command for the container
+CMD ["bash"]

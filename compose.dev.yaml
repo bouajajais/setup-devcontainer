@@ -1,0 +1,8 @@
+name: dev-setup-devcontainer
+
+services:
+  dev-setup-devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: dev-setup-devcontainer

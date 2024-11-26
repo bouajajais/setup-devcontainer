@@ -1,4 +1,4 @@
-ENV_FILE="${1:-.env}"
+ENV_FILE="${1:-.user_guid.env}"
 USER_UID="${2:-$(id -u)}"
 USER_GID="${3:-$(id -g)}"
 

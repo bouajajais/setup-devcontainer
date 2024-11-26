@@ -1,0 +1,17 @@
+{
+    "clear-folder": true,
+    "name": "myapp",
+    "ports": [],
+    "include-gpu": false,
+    "include-gitignore": false,
+    "volumes": {
+        "devcontainer": [],
+        "compose": [],
+        "devcompose": []
+    },
+    "extensions": {
+        "docker": false,
+        "copilot": false,
+        "python": false
+    }
+}

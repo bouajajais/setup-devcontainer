@@ -1,9 +1,9 @@
-name: setup-devcontainer
+name: NAME_PLACEHOLDER
 services:
-  setup-devcontainer:
+  NAME_PLACEHOLDER:
     build:
       context: .
       dockerfile: Dockerfile
     env_file:
       - .user_guid.env
-    image: setup-devcontainer
+    image: NAME_PLACEHOLDER

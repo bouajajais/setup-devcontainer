@@ -1,0 +1,7 @@
+name: NAME_PLACEHOLDER
+services:
+  NAME_PLACEHOLDER:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: NAME_PLACEHOLDER
