@@ -1,5 +1,6 @@
 from functools import wraps
 import os
+from pprint import pprint
 from config import get_config
 import settings
 from utilities import remove, copy
@@ -8,9 +9,10 @@ configurations = []
 
 def register_configuration(configuration):
     @wraps(configuration)
-    def wrapper(func):
-        configurations.append(configuration)
-        return func
+    def wrapper(*args, **kwargs):
+        print(f"Applying configuration: {configuration.__name__}")
+        return configuration(*args, **kwargs)
+    configurations.append(wrapper)
     return wrapper
 
 def setup_devcontainer(
@@ -20,6 +22,9 @@ def setup_devcontainer(
     ) -> None:
     if config is None:
         config = get_config()
+    
+    print("Configuration:")
+    pprint(config)
         
     # Clear folder
     clear_folder = config.get(

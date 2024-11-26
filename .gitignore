@@ -2,8 +2,6 @@
 **/.venv
 **/*.env
 data/**
-!data/static
-!data/static/**
 !.gitignore
 !.dockerignore
 !.devcontainer/**

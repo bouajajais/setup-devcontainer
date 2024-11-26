@@ -10,6 +10,6 @@ def remove(path: str) -> None:
 
 def copy(source: str, destination: str) -> None:
     if os.path.isdir(source):
-        shutil.copytree(source, destination)
+        shutil.copytree(source, destination, dirs_exist_ok=True)
     else:
         shutil.copy(source, destination)

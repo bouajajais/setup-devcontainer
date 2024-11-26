@@ -6,4 +6,7 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .user_guid.env
+    volumes:
+      - ${TARGET_PATH:-./data/target}:/app/data/target
+      - ${CONFIG_FILEPATH:-./config/config.json}:/app/config/config.json
     image: setup-devcontainer

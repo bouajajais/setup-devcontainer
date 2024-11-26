@@ -23,7 +23,7 @@
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "bash",
-                "python.pythonPath": "${containerEnv:PYTHON_PATH}"
+                "python.pythonPath": "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}"
             }
         }
     },

@@ -9,9 +9,10 @@ extensions_configurations = []
 
 def register_extension_configuration(extension_configuration):
     @wraps(extension_configuration)
-    def wrapper(func):
-        extensions_configurations.append(extension_configuration)
-        return func
+    def wrapper(*args, **kwargs):
+        print(f"Applying extension configuration: {extension_configuration.__name__}")
+        return extension_configuration(*args, **kwargs)
+    extensions_configurations.append(wrapper)
     return wrapper
 
 @register_configuration
@@ -34,9 +35,9 @@ def configure_name(target_folder: str, config: dict) -> None:
     with open(f"{target_folder}/compose.dev.yaml", "r") as f:
         compose = yaml.safe_load(f)
     compose["name"] = devname
-    if devname != "name_placeholder":
-        compose["services"][devname] = compose["services"]["name_placeholder"]
-        del compose["services"]["name_placeholder"]
+    compose["services"][devname] = compose["services"]["NAME_PLACEHOLDER"]
+    if devname != "NAME_PLACEHOLDER":
+        del compose["services"]["NAME_PLACEHOLDER"]
     compose["services"][devname]["image"] = devname
     with open(f"{target_folder}/compose.dev.yaml", "w") as f:
         yaml.dump(compose, f)
@@ -45,9 +46,9 @@ def configure_name(target_folder: str, config: dict) -> None:
     with open(f"{target_folder}/compose.yaml", "r") as f:
         compose = yaml.safe_load(f)
     compose["name"] = name
-    if name != "name_placeholder":
-        compose["services"][name] = compose["services"]["name_placeholder"]
-        del compose["services"]["name_placeholder"]
+    if name != "NAME_PLACEHOLDER":
+        compose["services"][name] = compose["services"]["NAME_PLACEHOLDER"]
+        del compose["services"]["NAME_PLACEHOLDER"]
     compose["services"][name]["image"] = name
     with open(f"{target_folder}/compose.yaml", "w") as f:
         yaml.dump(compose, f)

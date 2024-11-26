@@ -4,7 +4,7 @@ import settings
 
 @register_extension_configuration
 def configure_copilot(target_folder: str, config: dict) -> None:
-    copilot = config.get(
+    copilot = config.get("extensions", {}).get(
         "copilot",
         settings.DEFAULT_CONFIG["extensions"].get(
             "copilot",
@@ -25,7 +25,7 @@ def configure_copilot(target_folder: str, config: dict) -> None:
         
 @register_extension_configuration
 def configure_docker(target_folder: str, config: dict) -> None:
-    docker = config.get(
+    docker = config.get("extensions", {}).get(
         "docker",
         settings.DEFAULT_CONFIG["extensions"].get(
             "docker",
@@ -46,7 +46,7 @@ def configure_docker(target_folder: str, config: dict) -> None:
 
 @register_extension_configuration
 def configure_python(target_folder: str, config: dict) -> None:
-    python = config.get(
+    python = config.get("extensions", {}).get(
         "python",
         settings.DEFAULT_CONFIG["extensions"].get(
             "python",
@@ -59,7 +59,7 @@ def configure_python(target_folder: str, config: dict) -> None:
     if python:
         if "ms-python.python" not in devcontainer["customizations"]["vscode"]["extensions"]:
             devcontainer["customizations"]["vscode"]["extensions"].append("ms-python.python")
-        devcontainer["customizations"]["vscode"]["settings"]["python.pythonPath"] = "${containerEnv:PYTHON_PATH}"
+        devcontainer["customizations"]["vscode"]["settings"]["python.pythonPath"] = "${containerEnv:PYTHON_PATH:-/usr/local/bin/python}"
     else:
         if "ms-python.python" in devcontainer["customizations"]["vscode"]["extensions"]:
             devcontainer["customizations"]["vscode"]["extensions"].remove("ms-python.python")

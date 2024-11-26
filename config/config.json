@@ -1,17 +1,23 @@
 {
     "clear-folder": true,
-    "name": "myapp",
+    "name": "base-devcontainer",
     "ports": [],
-    "include-gpu": false,
-    "include-gitignore": false,
+    "include-gpu": true,
+    "include-gitignore": true,
     "volumes": {
         "devcontainer": [],
-        "compose": [],
-        "devcompose": []
+        "compose": [
+            "${DATA_PATH:-./data}:/app/data",
+            "${CONFIG_PATH:-./config}:/app/config"
+        ],
+        "devcompose": [
+            "${DATA_PATH:-./data}:/app/data",
+            "${CONFIG_PATH:-./config}:/app/config"
+        ]
     },
     "extensions": {
-        "docker": false,
-        "copilot": false,
+        "docker": true,
+        "copilot": true,
         "python": false
     }
 }
