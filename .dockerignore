@@ -8,10 +8,8 @@
 **/__pycache__
 **/.venv
 **/.classpath
-**/.dockerignore
 **/*.env
 **/.git
-**/.gitignore
 **/.project
 **/.settings
 **/.toolstarget
@@ -22,11 +20,13 @@
 **/*.jfm
 **/bin
 **/charts
-./docker-compose*
-./compose*.y*ml
-./Dockerfile*
 **/node_modules
 **/npm-debug.log
 **/obj
+./.dockerignore
+./.gitignore
+./docker-compose*
+./compose*.y*ml
+./Dockerfile*
 LICENSE
 README.md
