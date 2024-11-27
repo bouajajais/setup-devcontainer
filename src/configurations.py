@@ -16,12 +16,29 @@ def register_extension_configuration(extension_configuration):
     return wrapper
 
 @register_configuration
+def configure_dev_only(target_folder: str, config: dict) -> None:
+    dev_only = config.get(
+        "dev-only",
+        settings.DEFAULT_CONFIG["dev-only"]
+    )
+    
+    if dev_only:
+        remove(f"{target_folder}/compose.yaml")
+        remove(f"{target_folder}/Dockerfile")
+        remove(f"{target_folder}/entrypoint.sh")
+        remove(f"{target_folder}/set_user_guid.sh")
+
+@register_configuration
 def configure_name(target_folder: str, config: dict) -> None:
     name = config.get(
         "name",
         settings.DEFAULT_CONFIG["name"]
     )
     devname = f"dev-{name}"
+    dev_only = config.get(
+        "dev-only",
+        settings.DEFAULT_CONFIG["dev-only"]
+    )
     
     # update .devcontainer/devcontainer.json with project name
     with open(f"{target_folder}/.devcontainer/devcontainer.json", "r") as f:
@@ -41,6 +58,9 @@ def configure_name(target_folder: str, config: dict) -> None:
     compose["services"][devname]["image"] = devname
     with open(f"{target_folder}/compose.dev.yaml", "w") as f:
         yaml.dump(compose, f)
+        
+    if dev_only:
+        return
 
     # update compose.yaml with project name
     with open(f"{target_folder}/compose.yaml", "r") as f:
@@ -58,6 +78,10 @@ def configure_ports(target_folder: str, config: dict) -> None:
     ports = config.get(
         "ports",
         settings.DEFAULT_CONFIG["ports"]
+    )
+    dev_only = config.get(
+        "dev-only",
+        settings.DEFAULT_CONFIG["dev-only"]
     )
         
     # update .devcontainer/devcontainer.json with ports
@@ -81,6 +105,9 @@ def configure_ports(target_folder: str, config: dict) -> None:
             del compose["services"][compose["name"]]["ports"]
     with open(f"{target_folder}/compose.dev.yaml", "w") as f:
         yaml.dump(compose, f)
+        
+    if dev_only:
+        return
     
     # update compose.yaml with ports
     with open(f"{target_folder}/compose.yaml", "r") as f:
@@ -98,6 +125,10 @@ def configure_gpu(target_folder: str, config: dict) -> None:
     include_gpu = config.get(
         "include-gpu",
         settings.DEFAULT_CONFIG["include-gpu"]
+    )
+    dev_only = config.get(
+        "dev-only",
+        settings.DEFAULT_CONFIG["dev-only"]
     )
     
     # update compose.dev.yaml with GPU
@@ -122,6 +153,9 @@ def configure_gpu(target_folder: str, config: dict) -> None:
             del compose["services"][compose["name"]]["deploy"]
     with open(f"{target_folder}/compose.dev.yaml", "w") as f:
         yaml.dump(compose, f)
+        
+    if dev_only:
+        return
     
     # update compose.yaml with GPU
     with open(f"{target_folder}/compose.yaml", "r") as f:
@@ -162,6 +196,10 @@ def configure_volumes(target_folder: str, config: dict) -> None:
         "volumes",
         settings.DEFAULT_CONFIG["volumes"]
     )
+    dev_only = config.get(
+        "dev-only",
+        settings.DEFAULT_CONFIG["dev-only"]
+    )
     
     # update .devcontainer/devcontainer.json with volumes
     with open(f"{target_folder}/.devcontainer/devcontainer.json", "r") as f:
@@ -190,6 +228,9 @@ def configure_volumes(target_folder: str, config: dict) -> None:
             del compose["services"][compose["name"]]["volumes"]
     with open(f"{target_folder}/compose.dev.yaml", "w") as f:
         yaml.dump(compose, f)
+        
+    if dev_only:
+        return
     
     # update compose.yaml with volumes
     with open(f"{target_folder}/compose.yaml", "r") as f:

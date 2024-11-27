@@ -1,5 +1,6 @@
 {
     "clear-folder": true,
+    "dev-only": true,
     "name": "base-devcontainer",
     "ports": [],
     "include-gpu": true,

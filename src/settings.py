@@ -4,6 +4,7 @@ TARGET_FOLDER = "/app/data/target"
 
 DEFAULT_CONFIG = {
     "clear-folder": True,
+    "dev-only": False,
     "name": "base-devcontainer",
     "ports": [],
     "include-gpu": True,
