@@ -23,10 +23,5 @@
 **/node_modules
 **/npm-debug.log
 **/obj
-./.dockerignore
-./.gitignore
-./docker-compose*
-./compose*.y*ml
-./Dockerfile*
 LICENSE
 README.md
