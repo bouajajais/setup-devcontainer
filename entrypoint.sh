@@ -42,9 +42,9 @@ fi
 chown -R ${USERNAME}:${USERNAME} ${WORKDIR}
 
 # Run the command as the selected user
-# If the command is "config" run "python main.py config"
-if [ "$@" = "config" ]; then
-    exec gosu ${USERNAME} python main.py config
+# If the command is "config" run "poetry run main.py config"
+if [ "$1" = "config" ]; then
+    exec gosu ${USERNAME} poetry run python main.py config
 else
     exec gosu ${USERNAME} "$@"
 fi

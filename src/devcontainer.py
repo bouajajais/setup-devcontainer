@@ -32,8 +32,9 @@ def setup_devcontainer(
         settings.DEFAULT_CONFIG["clear-folder"]
     )
     if clear_folder:
-        remove(target_folder)
-        os.makedirs(target_folder, exist_ok=True)
+        # Remove all files and folders in target
+        for item in os.listdir(target_folder):
+            remove(os.path.join(target_folder, item))
         
     # Copy template into target
     copy(template_folder, target_folder)

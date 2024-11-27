@@ -55,7 +55,7 @@ USER $USERNAME
 WORKDIR /app/src
 
 # Copy Poetry files and install dependencies
-COPY --chown=${USERNAME}:${USERNAME} ./pyproject.toml ./poetry.lock* ./
+COPY --chown=${USERNAME}:${USERNAME} ./src/pyproject.toml ./src/poetry.lock* ./
 
 # Disable virtualenv creation
 RUN poetry config virtualenvs.create false

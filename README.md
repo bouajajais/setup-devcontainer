@@ -12,7 +12,7 @@ Other tags will be added later for proper versioning.
 
 ### [Optional] Step 1: Pull and edit `config.json`
 
-1. Run the following command to pull the default `config.json` locally:
+1. Run the following command to pull the default `config.json` locally: (make sure your local `config.json` file exists)
     ```bash
     docker run --rm -it -e USER_UID=$(id -u) -e USER_GID=$(id -g) -v /path/to/config.json:/app/config/config.json ismailbouajaja/setup-devcontainer config
     ```
@@ -299,14 +299,14 @@ To clone the github repository, follow these steps :
     - `ARG PYTHON_TAG=3.10-slim-buster`: The Python tag to use.
     - `ARG POETRY_VERSION=1.8.*`: The Poetry version to install.
 
-4. Run the Docker container to generate `config.json`:
+4. Run the Docker container to generate `config.json`: (make sure your local `config.json` file exists)
     ```bash
-    docker run --rm -it -e USER_UID=$(id -u) -e USER_GID=$(id -g) -v /path/to/config.json:/app/data/config/config.json setup-devcontainer config
+    docker run --rm -it -e USER_UID=$(id -u) -e USER_GID=$(id -g) -v /path/to/config.json:/app/config/config.json setup-devcontainer config
     ```
 
 5. Run the Docker container to initialize a project:
     ```bash
-    docker run --rm -it -e USER_UID=$(id -u) -e USER_GID=$(id -g) -v /optional/path/to/config.json:/app/data/config/config.json -v /path/to/project/folder:/app/data/target setup-devcontainer
+    docker run --rm -it -e USER_UID=$(id -u) -e USER_GID=$(id -g) -v /optional/path/to/config.json:/app/config/config.json -v /path/to/project/folder:/app/data/target setup-devcontainer
     ```
 
 ### Docker compose up
