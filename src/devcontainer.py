@@ -34,6 +34,8 @@ def setup_devcontainer(
     if clear_folder:
         # Remove all files and folders in target
         for item in os.listdir(target_folder):
+            if item == ".git":
+                continue
             remove(os.path.join(target_folder, item))
         
     # Copy template into target
