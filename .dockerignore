@@ -9,7 +9,6 @@
 **/.venv
 **/.classpath
 **/*.env
-**/.git
 **/.project
 **/.settings
 **/.toolstarget
