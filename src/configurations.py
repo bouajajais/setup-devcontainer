@@ -170,8 +170,13 @@ def configure_volumes(target_folder: str, config: dict) -> None:
         current_mounts = devcontainer.get("mounts", [])
         devcontainer["mounts"] = current_mounts + volumes.get("devcontainer", [])
     else:
-        if "mounts" in devcontainer:
-            del devcontainer["mounts"]
+        devcontainer["mounts"] = [
+            {
+                "source": "./",
+                "target": "/app",
+                "type": "bind"
+            }
+        ]
     with open(f"{target_folder}/.devcontainer/devcontainer.json", "w") as f:
         json.dump(devcontainer, f, indent=4)
     
