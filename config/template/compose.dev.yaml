@@ -4,6 +4,6 @@ services:
   NAME_PLACEHOLDER:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       target: dev
     image: NAME_PLACEHOLDER

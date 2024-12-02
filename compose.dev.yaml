@@ -4,6 +4,6 @@ services:
   dev-setup-devcontainer:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       target: dev
     image: dev-setup-devcontainer
