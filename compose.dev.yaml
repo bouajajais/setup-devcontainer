@@ -5,4 +5,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+      target: dev
     image: dev-setup-devcontainer

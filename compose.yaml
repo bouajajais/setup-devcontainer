@@ -4,9 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: prod
     env_file:
       - .user_guid.env
+    image: setup-devcontainer
+    stdin_open: true # Keeps stdin open for the service
+    tty: true # Allocates a pseudo-TTY
     volumes:
       - ${TARGET_PATH:-./data/target}:/app/data/target
       - ${CONFIG_FILEPATH:-./config/config.json}:/app/config/config.json
-    image: setup-devcontainer

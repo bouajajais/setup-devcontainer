@@ -23,6 +23,6 @@ DEFAULT_CONFIG = {
     "extensions": {
         "docker": True,
         "copilot": True,
-        "python": False
+        "python": True
     }
 }

@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: prod
     env_file:
       - .user_guid.env
     image: NAME_PLACEHOLDER
+    stdin_open: true
+    tty: true

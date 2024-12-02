@@ -1,6 +1,6 @@
 {
     "clear-folder": true,
-    "dev-only": true,
+    "dev-only": false,
     "name": "base-devcontainer",
     "ports": [],
     "include-gpu": true,
@@ -19,6 +19,6 @@
     "extensions": {
         "docker": true,
         "copilot": true,
-        "python": false
+        "python": true
     }
 }
