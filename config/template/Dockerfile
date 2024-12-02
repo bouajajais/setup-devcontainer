@@ -11,7 +11,7 @@ ARG PYTHON_VERSION=3.10
 
 #################### DEV IMAGE ####################
 
-FROM ismailbouajaja/docker-poetry:docker__${DOCKER_TAG}--poetry__${POETRY_VERSION}--python__${PYTHON_VERSION}--dev AS dev
+FROM ismailbouajaja/poetry:poetry__${POETRY_VERSION}--python__${PYTHON_VERSION}--dev AS dev
 
 # # Switch to user
 # USER user
@@ -33,10 +33,7 @@ FROM ismailbouajaja/docker-poetry:docker__${DOCKER_TAG}--poetry__${POETRY_VERSIO
 
 #################### PROD IMAGE ####################
 
-FROM ismailbouajaja/docker-poetry:docker__${DOCKER_TAG}--poetry__${POETRY_VERSION}--python__${PYTHON_VERSION} AS prod
-
-# # Switch to user
-# USER user
+FROM ismailbouajaja/poetry:poetry__${POETRY_VERSION}--python__${PYTHON_VERSION} AS prod
 
 # # Change the working directory to /app/src
 # WORKDIR /app/src
@@ -55,8 +52,6 @@ FROM ismailbouajaja/docker-poetry:docker__${DOCKER_TAG}--poetry__${POETRY_VERSIO
 
 # # Change the working directory to /app
 # WORKDIR /app/src
-
-# USER root
 
 # COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 # RUN chmod +x /usr/local/bin/entrypoint.sh
