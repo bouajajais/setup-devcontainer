@@ -24,7 +24,6 @@ def configure_dev_only(target_folder: str, config: dict) -> None:
     
     if dev_only:
         remove(f"{target_folder}/compose.yaml")
-        remove(f"{target_folder}/Dockerfile")
         remove(f"{target_folder}/entrypoint.sh")
         remove(f"{target_folder}/set_user_guid.sh")
 
