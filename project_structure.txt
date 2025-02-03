@@ -1,0 +1,69 @@
+. (root) 
+├── .devcontainer/
+│   ├── backend/
+│   │   └── devcontainer.json
+│   ├── frontend/
+│   │   └── devcontainer.json
+│   └── library/
+│       └── devcontainer.json
+├── .git/
+├── .github/
+├── backend/
+│   ├── .venv/
+│   ├── <project_name>/
+│   ├── app1/
+│   ├── app2/
+│   ├── app3/
+│   ├── scripts/
+│   ├── .dockerignore
+│   ├── .python-version
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── compose.dev.yaml
+│   ├── compose.yaml
+│   ├── manage.py
+│   ├── pyproject.toml
+│   └── uv.lock
+├── frontend/
+│   ├── .react-router/
+│   ├── app/
+│   ├── node_modules/
+│   ├── public/
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── compose.dev.yaml
+│   ├── compose.yaml
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── react-router.config.ts
+│   ├── tailwind.config.ts
+│   ├── tsconfig.json
+│   └── vite.config.ts
+├── library/
+│   ├── .venv/
+│   ├── src/
+│   │   └── <library_name>/
+│   │       ├── py.typed
+│   │       └── __init__.py
+│   ├── test/
+│   ├── .dockerignore
+│   ├── .python-version
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── compose.yaml
+│   ├── pyproject.toml
+│   └── uv.lock
+├── secrets/
+│   ├── .git/
+│   ├── backend/
+│   │   ├── jwt_key.txt
+│   │   ├── aws_access_key_id.txt
+│   │   ├── aws_secret_access_key.txt
+│   │   └── db_password.txt
+│   ├── frontend/
+│   └── library/
+│       └── api_key.txt
+├── .gitignore
+├── compose.dev.yaml
+└── compose.yaml
